@@ -2,16 +2,21 @@ package com.ecommerce.huskycommerce.services;
 
 import java.util.List;
 
+import com.ecommerce.huskycommerce.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import com.ecommerce.huskycommerce.entities.Role;
 import com.ecommerce.huskycommerce.entities.User;
 import com.ecommerce.huskycommerce.projections.UserDetailsProjection;
 import com.ecommerce.huskycommerce.repositories.UserRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -35,5 +40,23 @@ public class UserService implements UserDetailsService {
 		}
 		
 		return user;
+	}
+
+	protected User authenticated() {
+		try {
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			Jwt jwtPrincipal = (Jwt) authentication.getPrincipal();
+			String username = jwtPrincipal.getClaim("username");
+			return repository.findByEmail(username).get();
+		}
+		catch (Exception e) {
+			throw new UsernameNotFoundException("User not found.");
+		}
+	}
+
+	@Transactional(readOnly = true)
+	public UserDTO getProfile() {
+		User user = authenticated();
+		return new UserDTO(user);
 	}
 }

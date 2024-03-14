@@ -1,6 +1,7 @@
 package com.ecommerce.huskycommerce.repositories;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.ecommerce.huskycommerce.projections.UserDetailsProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,7 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.ecommerce.huskycommerce.entities.User;
-
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -21,4 +21,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 				WHERE tb_user.email = :email
 			""")
 	List<UserDetailsProjection> searchUserAndRolesByEmail(String email);
+
+	Optional<User> findByEmail(String email);
 }
