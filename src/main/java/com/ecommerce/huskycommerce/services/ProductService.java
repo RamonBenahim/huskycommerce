@@ -1,6 +1,7 @@
 package com.ecommerce.huskycommerce.services;
 
 import com.ecommerce.huskycommerce.dto.ProductDTO;
+import com.ecommerce.huskycommerce.dto.ProductMinDTO;
 import com.ecommerce.huskycommerce.entities.Product;
 import com.ecommerce.huskycommerce.repositories.ProductRepository;
 import com.ecommerce.huskycommerce.services.exceptions.DatabaseException;
@@ -13,9 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-
 
 @Service
 public class ProductService {
@@ -30,9 +28,9 @@ public class ProductService {
     return new ProductDTO(product);
   }
   @Transactional(readOnly = true)
-  public Page<ProductDTO> findAll(String name, Pageable pageable) {
+  public Page<ProductMinDTO> findAll(String name, Pageable pageable) {
     Page<Product> result = repository.searchByName(name, pageable);
-    return result.map(x -> new ProductDTO(x));
+    return result.map(x -> new ProductMinDTO(x));
   }
   @Transactional
   public ProductDTO insert(ProductDTO dto) {
