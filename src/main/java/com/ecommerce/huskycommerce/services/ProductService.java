@@ -1,7 +1,9 @@
 package com.ecommerce.huskycommerce.services;
 
+import com.ecommerce.huskycommerce.dto.CategoryDTO;
 import com.ecommerce.huskycommerce.dto.ProductDTO;
 import com.ecommerce.huskycommerce.dto.ProductMinDTO;
+import com.ecommerce.huskycommerce.entities.Category;
 import com.ecommerce.huskycommerce.entities.Product;
 import com.ecommerce.huskycommerce.repositories.ProductRepository;
 import com.ecommerce.huskycommerce.services.exceptions.DatabaseException;
@@ -71,5 +73,13 @@ public class ProductService {
     entity.setDescription(dto.getDescription());
     entity.setPrice(dto.getPrice());
     entity.setImgUrl(dto.getImgUrl());
+
+    entity.getCategories().clear();
+
+    for(CategoryDTO catDto : dto.getCategories()) {
+      Category cat = new Category();
+      cat.setId(catDto.getId());
+      entity.getCategories().add(cat);
+    }
   }
 }
