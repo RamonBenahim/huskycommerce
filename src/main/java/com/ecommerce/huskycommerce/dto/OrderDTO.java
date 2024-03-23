@@ -3,6 +3,7 @@ package com.ecommerce.huskycommerce.dto;
 import com.ecommerce.huskycommerce.entities.Order;
 import com.ecommerce.huskycommerce.entities.OrderItem;
 import com.ecommerce.huskycommerce.entities.OrderStatus;
+import jakarta.validation.constraints.NotEmpty;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -15,6 +16,8 @@ public class OrderDTO {
   private OrderStatus status;
   private ClientDTO user;
   private PaymentDTO payment;
+
+  @NotEmpty(message = "O Pedido deve ter pelo menos um produto.")
   private List<OrderItemDTO> items = new ArrayList<>();
 
   public OrderDTO(Long id, Instant moment, OrderStatus status, ClientDTO user, PaymentDTO payment) {
